@@ -1,0 +1,9 @@
+Pull the following from COADREAD.clin.merged.txt
+
+patient identifier: patient.bcr_patient_barcode
+stage:              patient.stage_event.pathologic_stage
+tissue type:        patient.tumor_tissue_site
+
+
+Other interesting columns for our work:
+patient.anatomic_neoplasm_subdivision

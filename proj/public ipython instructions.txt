@@ -1,0 +1,24 @@
+You can install Jupyter using Anaconda Python (conda install jupyter). If you want to run Jupyter notebooks from the cluster, start by creating a jupyter config file (~/.jupyter/jupyter_notebook_config.py) if one doesn't already exist using
+
+jupyter notebook --generate-config
+Next, create SSL credentials using
+
+openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout ~/.jupyter/mycert.key -out ~/.jupyter/mycert.pem
+Next, open Python and use the following to generate a password:
+
+In [1]: from notebook.auth import passwd
+In [2]: passwd()
+Enter password:
+Verify password:
+Out[2]: 'sha1:67c9e60bb8b6:9ffede0825894254b2e042ea597d771089e11aed'
+Copy the password hash and open the jupyter config file (~/.jupyter/jupyter_notebook_config.py). Make the following changes:
+
+Uncomment c.NotebookApp.ip and change the line to c.NotebookApp.ip = '*'.
+Uncomment c.NotebookApp.port and change it to c.NotebookApp.port = 7777 replacing 7777 with a new (unused) port number. Ports 7700-7799 are open for notebooks. If the port is already used by someone else, I hope Jupyter will complain and tell you. If you are having trouble accessing your notebooks (or your password doesn't work), try a different port number.
+Uncomment c.NotebookApp.certfile and change it to c.NotebookApp.certfile = u'/frazer01/home/username/.jupyter/mycert.pem' replacing username with your username.
+Uncomment c.NotebookApp.open_browser and change it to c.NotebookApp.open_browser = False.
+Uncomment c.NotebookApp.password and change it to c.NotebookApp.password = u'sha1:67c9e60bb8b6:9ffede0825894254b2e042ea597d771089e11aed' but using your hash from above.
+Uncomment c.NotebookApp.keyfile and change it to c.NotebookApp.keyfile = u'/frazer01/home/username/.jupyter/mycert.key' replacing username with your username.
+You should now be able to launch your notebooks with jupyter notebook and access them at https://flh1.ucsd.edu:7777 replacing 7777 with the port number you chose above. Note that you need to use https and a password to access your notebooks over the web. If you don't need to use https or a password, you've done something wrong. You can launch a notebook server in a screen if you want to let it run indefinitely.
+
+These instructions are a simplified version of these instructions. If in doubt, refer to the jupyter documentation.
